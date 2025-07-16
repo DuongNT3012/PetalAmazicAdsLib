@@ -33,27 +33,19 @@ public class InterManager {
         }
     }
 
-    public static void loadAndShowInterAds(AppCompatActivity activity, List<String> listIdRewardAds, String adsKey, String remoteKey) {
-        if (listInter.get(adsKey) == null) {
-            listInter.put(adsKey, Petal.getInstance().loadAndShowInterAds(activity, listIdRewardAds, new InterAdsCallback(), remoteKey));
-        } else {
-            Log.d(TAG, "Inter already loaded. (Inter != null). " + adsKey + "_" + remoteKey);
-        }
+    public static void loadAndShowInterAds(AppCompatActivity activity, List<String> listIdRewardAds, String remoteKey) {
+        Petal.getInstance().loadAndShowInterAds(activity, listIdRewardAds, new InterAdsCallback(), remoteKey);
     }
 
     public static void loadAndShowInterAds(AppCompatActivity activity, String adsKey, String remoteKey) {
-        if (listInter.get(adsKey) == null) {
-            listInter.put(adsKey, Petal.getInstance().loadAndShowInterAds(activity, AdmobApi.getInstance().getListIDByName(adsKey), new InterAdsCallback(), remoteKey));
-        } else {
-            Log.d(TAG, "Inter already loaded. (Inter != null). " + adsKey + "_" + remoteKey);
-        }
+        Petal.getInstance().loadAndShowInterAds(activity, AdmobApi.getInstance().getListIDByName(adsKey), new InterAdsCallback(), remoteKey);
     }
 
     public static void showInterAds(AppCompatActivity activity, String adsKey, String remoteKey, InterAdsCallback rewardAdsCallback, boolean isReloadInterAfterShow) {
         Petal.getInstance().showInterAds(activity, listInter.get(adsKey), rewardAdsCallback, remoteKey);
         listInter.put(adsKey, null);
         if (isReloadInterAfterShow) {
-            loadAndShowInterAds(activity, adsKey, remoteKey);
+            loadInterAds(activity, adsKey, remoteKey);
         }
     }
 }

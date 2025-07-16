@@ -267,7 +267,7 @@ public class Petal {
             @Override
             public void onNativeAdLoaded(NativeAd nativeAd) {
                 // Called each time an ad is successfully loaded.
-                Log.i(TAG, "onNativeAdLoaded: " + remoteKey);
+                Log.i(TAG, "NATIVE: onNativeAdLoaded: " + remoteKey);
                 nativeBuilder.getCallback().onNativeAdLoaded(nativeAd);
 
                 VideoConfiguration videoConfiguration = new VideoConfiguration.Builder()
@@ -295,7 +295,7 @@ public class Petal {
             @Override
             public void onAdLoaded() {
                 // Called when all ads are successfully returned.
-                Log.i(TAG, "onAdLoaded: " + remoteKey);
+                Log.i(TAG, "NATIVE: onAdLoaded: " + remoteKey);
                 nativeBuilder.getCallback().onAdLoaded();
 
             }
@@ -303,7 +303,7 @@ public class Petal {
             @Override
             public void onAdFailed(int errorCode) {
                 // Called when ads fail to be loaded.
-                Log.e(TAG, "onAdFailed: " + errorCode + " " + remoteKey);
+                Log.e(TAG, "NATIVE: onAdFailed: " + errorCode + " " + remoteKey);
                 nativeBuilder.getCallback().onAdFailed(errorCode);
                 if (!listIdNativeTemp.isEmpty()) {
                     listIdNativeTemp.remove(0);
@@ -314,35 +314,35 @@ public class Petal {
             @Override
             public void onAdClicked() {
                 super.onAdClicked();
-                Log.i(TAG, "onAdClicked: " + remoteKey);
+                Log.d(TAG, "NATIVE: onAdClicked: " + remoteKey);
                 nativeBuilder.getCallback().onAdClicked();
             }
 
             @Override
             public void onAdImpression() {
                 super.onAdImpression();
-                Log.i(TAG, "onAdImpression: " + remoteKey);
+                Log.d(TAG, "NATIVE: onAdImpression: " + remoteKey);
                 nativeBuilder.getCallback().onAdImpression();
             }
 
             @Override
             public void onAdOpened() {
                 super.onAdOpened();
-                Log.i(TAG, "onAdOpened: " + remoteKey);
+                Log.d(TAG, "NATIVE: onAdOpened: " + remoteKey);
                 nativeBuilder.getCallback().onAdOpened();
             }
 
             @Override
             public void onAdLeave() {
                 super.onAdLeave();
-                Log.i(TAG, "onAdLeave: " + remoteKey);
+                Log.d(TAG, "NATIVE: onAdLeave: " + remoteKey);
                 nativeBuilder.getCallback().onAdLeave();
             }
 
             @Override
             public void onAdClosed() {
                 super.onAdClosed();
-                Log.i(TAG, "onAdClosed: " + remoteKey);
+                Log.d(TAG, "NATIVE: onAdClosed: " + remoteKey);
                 nativeBuilder.getCallback().onAdClosed();
             }
         }).build();
@@ -380,6 +380,7 @@ public class Petal {
 
         // Register the native ad object.
         nativeView.setNativeAd(nativeAd);
+        Log.d(TAG, "NATIVE: initNativeAdView.");
     }
     //END NATIVE ADS
 
@@ -388,7 +389,7 @@ public class Petal {
         ArrayList<String> listIdNativeTemp = new ArrayList<>(listIdReward);
         //Check condition
         if (!NetworkUtil.isNetworkActive(activity) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "NATIVE: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+            Log.d(TAG, "REWARD: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
             callback.onRewardAdFailedToLoad(-1);
             return null;
         }
@@ -399,14 +400,14 @@ public class Petal {
             @Override
             public void onRewardedLoaded() {
                 // Rewarded ad loaded successfully.
-                Log.i(TAG, "onRewardedLoaded: " + remoteKey);
+                Log.i(TAG, "REWARD: onRewardedLoaded: " + remoteKey);
                 callback.onRewardedLoaded();
             }
 
             @Override
             public void onRewardAdFailedToLoad(int errorCode) {
                 // Failed to load the rewarded ad.
-                Log.e(TAG, "onRewardAdFailedToLoad: " + errorCode + " " + remoteKey);
+                Log.e(TAG, "REWARD: onRewardAdFailedToLoad: " + errorCode + " " + remoteKey);
                 callback.onRewardAdFailedToLoad(errorCode);
                 if (!listIdNativeTemp.isEmpty()) {
                     listIdNativeTemp.remove(0);
@@ -456,14 +457,14 @@ public class Petal {
             @Override
             public void onRewardAdOpened() {
                 // Rewarded ad opened.
-                Log.i(TAG, "onRewardAdOpened: " + remoteKey);
+                Log.i(TAG, "REWARD: onRewardAdOpened: " + remoteKey);
                 callback.onRewardAdOpened();
             }
 
             @Override
             public void onRewardAdFailedToShow(int errorCode) {
                 // Failed to display the rewarded ad.
-                Log.e(TAG, "onRewardAdFailedToShow: " + errorCode + " " + remoteKey);
+                Log.e(TAG, "REWARD: onRewardAdFailedToShow: " + errorCode + " " + remoteKey);
                 callback.onRewardAdFailedToShow(errorCode);
                 callback.onNextAction();
                 if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
@@ -474,7 +475,7 @@ public class Petal {
             @Override
             public void onRewardAdClosed() {
                 // Rewarded ad closed.
-                Log.i(TAG, "onRewardAdClosed: " + remoteKey);
+                Log.d(TAG, "REWARD: onRewardAdClosed: " + remoteKey);
                 callback.onRewardAdClosed();
                 callback.onNextAction();
                 if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
@@ -485,12 +486,11 @@ public class Petal {
             @Override
             public void onRewarded(Reward reward) {
                 // Provide a reward when reward conditions are met.
-                Log.i(TAG, "onRewarded: " + remoteKey);
+                Log.d(TAG, "REWARD: onRewarded: " + remoteKey);
                 callback.onRewarded(reward);
             }
         });
     }
-
     //END REWARD ADS
 
     //INTER ADS
@@ -498,7 +498,7 @@ public class Petal {
         ArrayList<String> listIdNativeTemp = new ArrayList<>(listIdInter);
         //Check condition
         if (!NetworkUtil.isNetworkActive(activity) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "NATIVE: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+            Log.d(TAG, "INTER: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
             callback.onAdFailed(-1);
             callback.onNextAction();
             return null;
@@ -518,14 +518,14 @@ public class Petal {
             @Override
             public void onAdLoaded() {
                 // Called when an ad is loaded successfully.
-                Log.i(TAG, "onAdLoaded: " + remoteKey);
+                Log.i(TAG, "INTER: onAdLoaded: " + remoteKey);
                 callback.onAdLoaded();
             }
 
             @Override
             public void onAdFailed(int errorCode) {
                 // Called when an ad fails to be loaded.
-                Log.e(TAG, "onAdFailed: " + errorCode + " " + remoteKey);
+                Log.e(TAG, "INTER: onAdFailed: " + errorCode + " " + remoteKey);
                 callback.onAdFailed(errorCode);
                 if (!listIdNativeTemp.isEmpty()) {
                     listIdNativeTemp.remove(0);
@@ -536,7 +536,7 @@ public class Petal {
             @Override
             public void onAdClosed() {
                 // Called when an ad is closed.
-                Log.i(TAG, "onAdClosed: " + remoteKey);
+                Log.d(TAG, "INTER: onAdClosed: " + remoteKey);
                 callback.onAdClosed();
                 callback.onNextAction();
             }
@@ -544,22 +544,25 @@ public class Petal {
             @Override
             public void onAdClicked() {
                 // Called when an ad is clicked.
-                Log.i(TAG, "onAdClicked: " + remoteKey);
+                Log.d(TAG, "INTER: onAdClicked: " + remoteKey);
                 callback.onAdClicked();
             }
 
             @Override
             public void onAdLeave() {
                 // Called when an ad leaves an app.
-                Log.i(TAG, "onAdLeave: " + remoteKey);
+                Log.d(TAG, "INTER: onAdLeave: " + remoteKey);
                 callback.onAdLeave();
             }
 
             @Override
             public void onAdOpened() {
                 // Called when an ad is opened.
-                Log.i(TAG, "onAdOpened: " + remoteKey);
+                Log.d(TAG, "INTER: onAdOpened: " + remoteKey);
                 callback.onAdOpened();
+                if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
+                    loadingAdsDialog.dismiss();
+                }
             }
         };
         interstitialAd.setAdListener(adListener);
@@ -571,7 +574,7 @@ public class Petal {
         ArrayList<String> listIdNativeTemp = new ArrayList<>(listIdInter);
         //Check condition
         if (!NetworkUtil.isNetworkActive(activity) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "NATIVE: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+            Log.d(TAG, "INTER: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
             if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
                 loadingAdsDialog.dismiss();
             }
@@ -598,7 +601,7 @@ public class Petal {
             @Override
             public void onAdLoaded() {
                 // Called when an ad is loaded successfully.
-                Log.i(TAG, "onAdLoaded: " + remoteKey);
+                Log.i(TAG, "INTER: onAdLoaded: " + remoteKey);
                 callback.onAdLoaded();
                 showInterAdsLoadAndShow(activity, interstitialAd, callback, remoteKey);
             }
@@ -606,7 +609,7 @@ public class Petal {
             @Override
             public void onAdFailed(int errorCode) {
                 // Called when an ad fails to be loaded.
-                Log.e(TAG, "onAdFailed: " + errorCode + " " + remoteKey);
+                Log.e(TAG, "INTER: onAdFailed: " + errorCode + " " + remoteKey);
                 callback.onAdFailed(errorCode);
                 if (!listIdNativeTemp.isEmpty()) {
                     listIdNativeTemp.remove(0);
@@ -617,7 +620,7 @@ public class Petal {
             @Override
             public void onAdClosed() {
                 // Called when an ad is closed.
-                Log.i(TAG, "onAdClosed: " + remoteKey);
+                Log.d(TAG, "INTER: onAdClosed: " + remoteKey);
                 callback.onAdClosed();
                 callback.onNextAction();
                 if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
@@ -628,21 +631,21 @@ public class Petal {
             @Override
             public void onAdClicked() {
                 // Called when an ad is clicked.
-                Log.i(TAG, "onAdClicked: " + remoteKey);
+                Log.d(TAG, "INTER: onAdClicked: " + remoteKey);
                 callback.onAdClicked();
             }
 
             @Override
             public void onAdLeave() {
                 // Called when an ad leaves an app.
-                Log.i(TAG, "onAdLeave: " + remoteKey);
+                Log.d(TAG, "INTER: onAdLeave: " + remoteKey);
                 callback.onAdLeave();
             }
 
             @Override
             public void onAdOpened() {
                 // Called when an ad is opened.
-                Log.i(TAG, "onAdOpened: " + remoteKey);
+                Log.d(TAG, "INTER: onAdOpened: " + remoteKey);
                 callback.onAdOpened();
             }
         };
@@ -654,16 +657,20 @@ public class Petal {
     public void showInterAds(AppCompatActivity activity, InterstitialAd interstitialAd, InterAdsCallback callback, String remoteKey) {
         //Check condition
         if (!NetworkUtil.isNetworkActive(activity) || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "REWARD: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+            Log.d(TAG, "INTER: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
             callback.onAdFailed(-1);
             callback.onNextAction();
             return;
         }
         if (interstitialAd == null || !interstitialAd.isLoaded()) {
-            Log.d(TAG, "REWARD: The rewarded ad wasn't ready yet.");
+            Log.d(TAG, "INTER: The rewarded ad wasn't ready yet.");
             callback.onAdFailed(-1);
             callback.onNextAction();
             return;
+        }
+        loadingAdsDialog = new LoadingAdsDialog(activity);
+        if (!loadingAdsDialog.isShowing() && !activity.isDestroyed()) {
+            loadingAdsDialog.show();
         }
         interstitialAd.show(activity);
     }
@@ -671,13 +678,13 @@ public class Petal {
     public void showInterAdsLoadAndShow(AppCompatActivity activity, InterstitialAd interstitialAd, InterAdsCallback callback, String remoteKey) {
         //Check condition
         if (!NetworkUtil.isNetworkActive(activity) || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "REWARD: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+            Log.d(TAG, "INTER: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
             callback.onAdFailed(-1);
             callback.onNextAction();
             return;
         }
         if (interstitialAd == null || !interstitialAd.isLoaded()) {
-            Log.d(TAG, "REWARD: The rewarded ad wasn't ready yet.");
+            Log.d(TAG, "INTER: The rewarded ad wasn't ready yet.");
             callback.onAdFailed(-1);
             callback.onNextAction();
             return;
