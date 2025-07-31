@@ -3,9 +3,10 @@ package com.amazic.example.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.amazic.example.databinding.ActivitySplashBinding
 import com.amazic.petalamazic.callback.SplashAdsCallback
 import com.amazic.petalamazic.petal.Petal
-import com.amazic.example.databinding.ActivitySplashBinding
+import com.amazic.petalamazic.utils.RemoteConfigHelper
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
@@ -14,6 +15,18 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        RemoteConfigHelper.getInstance().fetchData(this, object : RemoteConfigHelper.IOnFetchDone {
+            override fun onFetchDone() {
+                loadSplashAds()
+            }
+
+            override fun onFetchFail() {
+                loadSplashAds()
+            }
+        })
+    }
+
+    private fun loadSplashAds() {
         Petal.getInstance().loadSplashAds(this, binding.splashAdView, mutableListOf("testq6zq98hecj"), object : SplashAdsCallback() {
             override fun onNextAction() {
                 super.onNextAction()
