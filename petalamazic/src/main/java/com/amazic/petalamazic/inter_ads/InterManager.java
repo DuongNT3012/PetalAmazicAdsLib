@@ -33,12 +33,12 @@ public class InterManager {
         }
     }
 
-    public static void loadAndShowInterAds(AppCompatActivity activity, List<String> listIdRewardAds, String remoteKey) {
-        Petal.getInstance().loadAndShowInterAds(activity, listIdRewardAds, new InterAdsCallback(), remoteKey);
+    public static void loadAndShowInterAds(AppCompatActivity activity, List<String> listIdRewardAds, String remoteKey, InterAdsCallback rewardAdsCallback) {
+        Petal.getInstance().loadAndShowInterAds(activity, listIdRewardAds, rewardAdsCallback, remoteKey);
     }
 
-    public static void loadAndShowInterAds(AppCompatActivity activity, String adsKey, String remoteKey) {
-        Petal.getInstance().loadAndShowInterAds(activity, AdmobApi.getInstance().getListIDByName(adsKey), new InterAdsCallback(), remoteKey);
+    public static void loadAndShowInterAds(AppCompatActivity activity, String adsKey, String remoteKey, InterAdsCallback rewardAdsCallback) {
+        Petal.getInstance().loadAndShowInterAds(activity, AdmobApi.getInstance().getListIDByName(adsKey), rewardAdsCallback, remoteKey);
     }
 
     public static void showInterAds(AppCompatActivity activity, String adsKey, String remoteKey, InterAdsCallback rewardAdsCallback, boolean isReloadInterAfterShow) {
