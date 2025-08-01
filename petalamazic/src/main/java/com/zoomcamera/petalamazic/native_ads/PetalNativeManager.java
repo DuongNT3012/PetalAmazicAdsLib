@@ -1,5 +1,6 @@
 package com.zoomcamera.petalamazic.native_ads;
 
+import android.content.Context;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,7 +18,7 @@ import com.huawei.hms.ads.nativead.NativeAd;
 public class PetalNativeManager implements LifecycleEventObserver {
     private static final String TAG = "NativeManager";
     private final PetalNativeBuilder builder;
-    private final AppCompatActivity currentActivity;
+    private final Context context;
     private final LifecycleOwner lifecycleOwner;
     private final String remoteKeyMain;
     private boolean isAlwaysReloadOnResume = false;
@@ -28,8 +29,8 @@ public class PetalNativeManager implements LifecycleEventObserver {
     private Handler handlerTimeoutCallNative = new Handler(Looper.getMainLooper());
     private Runnable runnable;
 
-    public PetalNativeManager(AppCompatActivity currentActivity, PetalNativeBuilder builder, LifecycleOwner lifecycleOwner, String remoteKeyMain) {
-        this.currentActivity = currentActivity;
+    public PetalNativeManager(Context context, PetalNativeBuilder builder, LifecycleOwner lifecycleOwner, String remoteKeyMain) {
+        this.context = context;
         this.builder = builder;
         this.remoteKeyMain = remoteKeyMain;
         this.lifecycleOwner = lifecycleOwner;
@@ -75,7 +76,7 @@ public class PetalNativeManager implements LifecycleEventObserver {
         if (myNativeAdMain != null) {
             myNativeAdMain.destroy();
         }
-        myNativeAdMain = Petal.getInstance().loadNativeAds(currentActivity, builder.getListIdAdMain(), builder, builder.getMaxRequest(), remoteKeyMain);
+        myNativeAdMain = Petal.getInstance().loadNativeAds(context, builder.getListIdAdMain(), builder, builder.getMaxRequest(), remoteKeyMain);
     }
 
     public void setIntervalReloadNative(long intervalReloadNative) {

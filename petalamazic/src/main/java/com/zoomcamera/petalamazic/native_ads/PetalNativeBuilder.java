@@ -19,7 +19,7 @@ public class PetalNativeBuilder {
     private final int layoutNative;
     private final int layoutShimmerNative;
     private ShimmerFrameLayout shimmerFrameLayout;
-    private NativeView nativeView;
+    //private NativeView nativeView;
     private int maxRequest = 1;
 
     public PetalNativeBuilder(Context context, FrameLayout flAd, int layoutNative, int layoutShimmerNative) {
@@ -28,10 +28,10 @@ public class PetalNativeBuilder {
         this.layoutShimmerNative = layoutShimmerNative;
 
         flAd.removeAllViews();
-        nativeView = (NativeView) LayoutInflater.from(context).inflate(layoutNative, null);
-        flAd.addView(nativeView);
+        //nativeView = (NativeView) LayoutInflater.from(context).inflate(layoutNative, null);
+        //flAd.addView(nativeView);
         shimmerFrameLayout = (ShimmerFrameLayout) LayoutInflater.from(context).inflate(layoutShimmerNative, null);
-        //flAd.addView(shimmerFrameLayout);
+        flAd.addView(shimmerFrameLayout);
     }
 
     public int getLayoutNative() {

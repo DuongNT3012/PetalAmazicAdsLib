@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -179,14 +180,14 @@ public class Petal {
     //END SPLASH ADS
 
     //BANNER ADS
-    public BannerView loadBannerAds(AppCompatActivity activity, List<String> listIdBanner, String remoteKey, PetalBannerBuilder builder) {
+    public BannerView loadBannerAds(Context context, List<String> listIdBanner, String remoteKey, PetalBannerBuilder builder) {
         ArrayList<String> listIdBannerTemp = new ArrayList<>(listIdBanner);
-        if (!NetworkUtil.isNetworkActive(activity) || listIdBannerTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "BANNER ADS: Check condition. RemoteKey:" + remoteKey + ". Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdBannerTemp.isEmpty() + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+        if (!NetworkUtil.isNetworkActive(context) || listIdBannerTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(context, remoteKey)) {
+            Log.d(TAG, "BANNER ADS: Check condition. RemoteKey:" + remoteKey + ". Network:" + NetworkUtil.isNetworkActive(context) + "_IdEmpty:" + listIdBannerTemp.isEmpty() + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(context, remoteKey));
             builder.getCallBack().onNextAction();
             return null;
         }
-        BannerView bannerView = new BannerView(activity);
+        BannerView bannerView = new BannerView(context);
         bannerView.setAdId(listIdBannerTemp.get(0)); //"testw6vs28auh3"
         bannerView.setBannerAdSize(builder.getBannerAdSize());
         bannerView.setBannerRefresh(builder.getTimeRefresh());
@@ -208,7 +209,7 @@ public class Petal {
                 if (!listIdBannerTemp.isEmpty()) {
                     listIdBannerTemp.remove(0);
                 }
-                loadBannerAds(activity, listIdBannerTemp, remoteKey, builder);
+                loadBannerAds(context, listIdBannerTemp, remoteKey, builder);
             }
 
             @Override
@@ -254,15 +255,15 @@ public class Petal {
     //NATIVE ADS
     private NativeAd myNativeAds;
 
-    public NativeAd loadNativeAds(AppCompatActivity activity, List<String> listIdNative, PetalNativeBuilder nativeBuilder, int maxRequest, String remoteKey) {
+    public NativeAd loadNativeAds(Context context, List<String> listIdNative, PetalNativeBuilder nativeBuilder, int maxRequest, String remoteKey) {
         ArrayList<String> listIdNativeTemp = new ArrayList<>(listIdNative);
         //Check condition
-        if (!NetworkUtil.isNetworkActive(activity) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "NATIVE: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+        if (!NetworkUtil.isNetworkActive(context) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(context, remoteKey)) {
+            Log.d(TAG, "NATIVE: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(context) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(context, remoteKey));
             nativeBuilder.getCallback().onAdFailed(-1);
             return null;
         }
-        NativeAdLoader.Builder builder = new NativeAdLoader.Builder(activity, listIdNativeTemp.get(0));
+        NativeAdLoader.Builder builder = new NativeAdLoader.Builder(context, listIdNativeTemp.get(0));
         NativeAdLoader nativeAdLoader = builder.setNativeAdLoadedListener(new NativeAd.NativeAdLoadedListener() {
             @Override
             public void onNativeAdLoaded(NativeAd nativeAd) {
@@ -277,7 +278,7 @@ public class Petal {
                 nativeAd.setVideoConfiguration(videoConfiguration);
 
                 // Obtain NativeView.
-                final NativeView nativeView = (NativeView) activity.getLayoutInflater().inflate(nativeBuilder.getLayoutNative(), null);
+                final NativeView nativeView = (NativeView) LayoutInflater.from(context).inflate(nativeBuilder.getLayoutNative(), null);
                 initNativeAdView(nativeAd, nativeView);
                 // Add NativeView to the UI.
                 nativeBuilder.getFlAd().removeAllViews();
@@ -308,7 +309,7 @@ public class Petal {
                 if (!listIdNativeTemp.isEmpty()) {
                     listIdNativeTemp.remove(0);
                 }
-                loadNativeAds(activity, listIdNative, nativeBuilder, maxRequest, remoteKey);
+                loadNativeAds(context, listIdNative, nativeBuilder, maxRequest, remoteKey);
             }
 
             @Override
