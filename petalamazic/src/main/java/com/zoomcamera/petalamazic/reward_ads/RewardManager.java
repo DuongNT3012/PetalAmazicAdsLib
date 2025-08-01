@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.zoomcamera.petalamazic.callback.RewardAdsCallback;
-import com.zoomcamera.petalamazic.petal.AdmobApi;
+import com.zoomcamera.petalamazic.call_api.AdmobApi;
 import com.zoomcamera.petalamazic.petal.Petal;
 import com.huawei.hms.ads.reward.RewardAd;
 

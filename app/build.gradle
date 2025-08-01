@@ -69,4 +69,7 @@ dependencies {
     implementation 'com.huawei.agconnect:agconnect-core:1.9.3.301'
     implementation 'com.huawei.agconnect:agconnect-remoteconfig:1.9.3.301'
     implementation 'com.huawei.agconnect:agconnect-remoteconfig-ktx:1.9.1.300'
+
+    implementation 'com.huawei.agconnect:agconnect-crash:1.9.3.301'
+    //implementation 'com.huawei.agconnect:agconnect-apms:1.6.3.300'
 }
