@@ -1,11 +1,11 @@
 plugins {
     id 'com.android.library'
-    alias(libs.plugins.kotlin.android)
+    id 'org.jetbrains.kotlin.android'
     id 'maven-publish'
 }
 
 android {
-    namespace 'com.amazic.petalamazic'
+    namespace 'com.zoomcamera.petalamazic'
     compileSdk 35
 
     defaultConfig {
@@ -86,4 +86,5 @@ dependencies {
 
     implementation 'com.huawei.agconnect:agconnect-core:1.9.3.301'
     implementation 'com.huawei.agconnect:agconnect-remoteconfig:1.9.3.301'
+    implementation 'com.huawei.agconnect:agconnect-remoteconfig-ktx:1.9.1.300'
 }
