@@ -261,6 +261,7 @@ public class Petal {
         if (!NetworkUtil.isNetworkActive(context) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(context, remoteKey)) {
             Log.d(TAG, "NATIVE: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(context) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(context, remoteKey));
             nativeBuilder.getCallback().onAdFailed(-1);
+            nativeBuilder.getFlAd().removeAllViews();
             return null;
         }
         NativeAdLoader.Builder builder = new NativeAdLoader.Builder(context, listIdNativeTemp.get(0));
