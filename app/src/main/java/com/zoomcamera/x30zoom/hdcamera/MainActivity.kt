@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         //bannerManager.setIntervalReloadBanner(10000)
 
         val nativeBuilder = PetalNativeBuilder(this, binding.frNative, com.zoomcamera.petalamazic.R.layout.layout_native_large, com.zoomcamera.petalamazic.R.layout.shimmer_native_large)
-        nativeBuilder.listIdAdMain = mutableListOf("testy63txaom86")
+        nativeBuilder.listIdAdMain = AdmobApi.getInstance().getListIDByName("native_all")
         val nativeManager = PetalNativeManager(this, nativeBuilder, this, "native_all")
         //nativeManager.setAlwaysReloadOnResume(true)
         //nativeManager.setIntervalReloadBanner(10000)

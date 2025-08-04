@@ -310,7 +310,7 @@ public class Petal {
                 if (!listIdNativeTemp.isEmpty()) {
                     listIdNativeTemp.remove(0);
                 }
-                loadNativeAds(context, listIdNative, nativeBuilder, maxRequest, remoteKey);
+                loadNativeAds(context, listIdNativeTemp, nativeBuilder, maxRequest, remoteKey);
             }
 
             @Override
@@ -388,15 +388,15 @@ public class Petal {
 
     //REWARD ADS
     public RewardAd loadRewardAd(AppCompatActivity activity, List<String> listIdReward, RewardAdsCallback callback, String remoteKey) {
-        ArrayList<String> listIdNativeTemp = new ArrayList<>(listIdReward);
+        ArrayList<String> listIdRewardTemp = new ArrayList<>(listIdReward);
         //Check condition
-        if (!NetworkUtil.isNetworkActive(activity) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "REWARD: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+        if (!NetworkUtil.isNetworkActive(activity) || listIdRewardTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
+            Log.d(TAG, "REWARD: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdRewardTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
             callback.onRewardAdFailedToLoad(-1);
             return null;
         }
 
-        RewardAd rewardAd = new RewardAd(activity, listIdNativeTemp.get(0));
+        RewardAd rewardAd = new RewardAd(activity, listIdRewardTemp.get(0));
 
         RewardAdLoadListener listener = new RewardAdLoadListener() {
             @Override
@@ -411,10 +411,10 @@ public class Petal {
                 // Failed to load the rewarded ad.
                 Log.e(TAG, "REWARD: onRewardAdFailedToLoad: " + errorCode + " " + remoteKey);
                 callback.onRewardAdFailedToLoad(errorCode);
-                if (!listIdNativeTemp.isEmpty()) {
-                    listIdNativeTemp.remove(0);
+                if (!listIdRewardTemp.isEmpty()) {
+                    listIdRewardTemp.remove(0);
                 }
-                loadRewardAd(activity, listIdNativeTemp, callback, remoteKey);
+                loadRewardAd(activity, listIdRewardTemp, callback, remoteKey);
             }
         };
         AdParam.Builder builder = new AdParam.Builder();
@@ -497,16 +497,16 @@ public class Petal {
 
     //INTER ADS
     public InterstitialAd loadInterAds(AppCompatActivity activity, List<String> listIdInter, InterAdsCallback callback, String remoteKey) {
-        ArrayList<String> listIdNativeTemp = new ArrayList<>(listIdInter);
+        ArrayList<String> listIdInterTemp = new ArrayList<>(listIdInter);
         //Check condition
-        if (!NetworkUtil.isNetworkActive(activity) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "INTER: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+        if (!NetworkUtil.isNetworkActive(activity) || listIdInterTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
+            Log.d(TAG, "INTER: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdInterTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
             callback.onAdFailed(-1);
             callback.onNextAction();
             return null;
         }
         InterstitialAd interstitialAd = new InterstitialAd(activity);
-        interstitialAd.setAdId(listIdNativeTemp.get(0));
+        interstitialAd.setAdId(listIdInterTemp.get(0));
         // Load an interstitial ad.
         AdParam.Builder builder = new AdParam.Builder();
         AdParam adParam = builder.build();
@@ -529,10 +529,10 @@ public class Petal {
                 // Called when an ad fails to be loaded.
                 Log.e(TAG, "INTER: onAdFailed: " + errorCode + " " + remoteKey);
                 callback.onAdFailed(errorCode);
-                if (!listIdNativeTemp.isEmpty()) {
-                    listIdNativeTemp.remove(0);
+                if (!listIdInterTemp.isEmpty()) {
+                    listIdInterTemp.remove(0);
                 }
-                loadAndShowInterAds(activity, listIdNativeTemp, callback, remoteKey);
+                loadAndShowInterAds(activity, listIdInterTemp, callback, remoteKey);
             }
 
             @Override
@@ -573,10 +573,10 @@ public class Petal {
     }
 
     public InterstitialAd loadAndShowInterAds(AppCompatActivity activity, List<String> listIdInter, InterAdsCallback callback, String remoteKey) {
-        ArrayList<String> listIdNativeTemp = new ArrayList<>(listIdInter);
+        ArrayList<String> listIdInterTemp = new ArrayList<>(listIdInter);
         //Check condition
-        if (!NetworkUtil.isNetworkActive(activity) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "INTER: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
+        if (!NetworkUtil.isNetworkActive(activity) || listIdInterTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
+            Log.d(TAG, "INTER: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdInterTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
             if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
                 loadingAdsDialog.dismiss();
             }
@@ -589,7 +589,7 @@ public class Petal {
             loadingAdsDialog.show();
         }
         InterstitialAd interstitialAd = new InterstitialAd(activity);
-        interstitialAd.setAdId(listIdNativeTemp.get(0));
+        interstitialAd.setAdId(listIdInterTemp.get(0));
         // Load an interstitial ad.
         AdParam.Builder builder = new AdParam.Builder();
         AdParam adParam = builder.build();
@@ -613,10 +613,10 @@ public class Petal {
                 // Called when an ad fails to be loaded.
                 Log.e(TAG, "INTER: onAdFailed: " + errorCode + " " + remoteKey);
                 callback.onAdFailed(errorCode);
-                if (!listIdNativeTemp.isEmpty()) {
-                    listIdNativeTemp.remove(0);
+                if (!listIdInterTemp.isEmpty()) {
+                    listIdInterTemp.remove(0);
                 }
-                loadAndShowInterAds(activity, listIdNativeTemp, callback, remoteKey);
+                loadAndShowInterAds(activity, listIdInterTemp, callback, remoteKey);
             }
 
             @Override
