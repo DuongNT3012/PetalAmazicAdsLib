@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.zoomcamera.x30zoom.hdcamera.databinding.ActivityMainBinding
 import com.zoomcamera.petalamazic.banner_ads.PetalBannerBuilder
 import com.zoomcamera.petalamazic.banner_ads.PetalBannerManager
+import com.zoomcamera.petalamazic.call_api.AdmobApi
 import com.zoomcamera.petalamazic.callback.InterAdsCallback
 import com.zoomcamera.petalamazic.callback.RewardAdsCallback
 import com.zoomcamera.petalamazic.inter_ads.InterManager
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val bannerBuilder = PetalBannerBuilder(this, binding.frBanner)
-        bannerBuilder.listIdAdMain = mutableListOf("testw6vs28auh3")
+        bannerBuilder.listIdAdMain = /*mutableListOf("testw6vs28auh3")*/AdmobApi.getInstance().getListIDByName("banner_all")
         val bannerManager = PetalBannerManager(this, bannerBuilder, this, "banner_all")
         //bannerManager.setAlwaysReloadOnResume(true)
         //bannerManager.setIntervalReloadBanner(10000)

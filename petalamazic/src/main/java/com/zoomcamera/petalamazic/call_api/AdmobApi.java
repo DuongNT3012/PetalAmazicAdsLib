@@ -7,13 +7,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.huawei.hms.ads.splash.SplashView;
 import com.zoomcamera.petalamazic.callback.ApiCallback;
 import com.zoomcamera.petalamazic.callback.SplashAdsCallback;
 import com.zoomcamera.petalamazic.petal.Petal;
 import com.zoomcamera.petalamazic.utils.NetworkUtil;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.huawei.hms.ads.splash.SplashView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -38,7 +39,7 @@ public class AdmobApi {
     public String appIDRelease = "ca-app-pub-4973559944609228~2346710863";
     private static volatile AdmobApi INSTANCE;
     private Context context;
-    private String jsonIdAdsDefault = "[{\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"splash_ads\",\"ads_id\": \"testq6zq98hecj\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"native_permission\",\"ads_id\": \"testy63txaom86\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"native_language\",\"ads_id\": \"testy63txaom86\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"testy63txaom86\",\"ads_id\": \"native_intro\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"testx9dtjwj8hp\",\"ads_id\": \"reward\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"testb4znbuh3n2\",\"ads_id\": \"inter_all\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"testy63txaom86\",\"ads_id\": \"native_all\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"testw6vs28auh3\",\"ads_id\": \"banner_all\"}]";
+    private String jsonIdAdsDefault = "[{\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"splash_ads\",\"ads_id\": \"testq6zq98hecj\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"native_permission\",\"ads_id\": \"testy63txaom86\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"native_language\",\"ads_id\": \"testy63txaom86\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"native_intro\",\"ads_id\": \"testy63txaom86\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"reward\",\"ads_id\": \"testx9dtjwj8hp\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"inter_all\",\"ads_id\": \"testb4znbuh3n2\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"native_all\",\"ads_id\": \"testy63txaom86\"}, {\"id\": 1,\"package_name\": null,\"app name\": \"Api test\",\"app_id\": \"ca-app-pub-4973559944609228~2346710863\",\"name\": \"banner_all\",\"ads_id\": \"testw6vs28auh3\"}]";
     private boolean isSetId = false;
     private int timeOutCallApi = 12000;
 
@@ -75,50 +76,6 @@ public class AdmobApi {
     }
 
     LinkedHashMap<String, List<String>> listAds = new LinkedHashMap<>();
-
-    public List<String> getListIDOpenSplash() {
-        return getListIDByName("open_splash");
-    }
-
-    public List<String> getListIDNativeLanguage() {
-        return getListIDByName("native_language");
-    }
-
-    public List<String> getListIDNativeIntro() {
-        return getListIDByName("native_intro");
-    }
-
-    public List<String> getListIDNativePermission() {
-        return getListIDByName("native_permission");
-    }
-
-    public List<String> getListIDNativeAll() {
-        return getListIDByName("native_all");
-    }
-
-    public List<String> getListIDInterSplash() {
-        return getListIDByName("inter_splash");
-    }
-
-    public List<String> getListIDInterAll() {
-        return getListIDByName("inter_all");
-    }
-
-    public List<String> getListIDBannerAll() {
-        return getListIDByName("banner_all");
-    }
-
-    public List<String> getListIDCollapseBannerAll() {
-        return getListIDByName("collapse_banner");
-    }
-
-    public List<String> getListIDInterIntro() {
-        return getListIDByName("inter_intro");
-    }
-
-    public List<String> getListIDAppOpenResume() {
-        return getListIDByName("open_resume");
-    }
 
     public List<String> getListIDByName(String nameAds) {
         List<String> list = new ArrayList<>();
@@ -182,35 +139,31 @@ public class AdmobApi {
     public void convertJsonIdAdsDefaultToList(String jsonIdAds) {
         listAds.clear();
         try {
-            ArrayList<AdsModel> listAdsModel = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(jsonIdAds);
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                int id = jsonObject.getInt("id");
-                String app_id = jsonObject.getString("app_id");
-                String name = jsonObject.getString("name");
+                String name = jsonObject.getString("name").trim();
                 String ads_id = jsonObject.getString("ads_id");
 
-                AdsModel adsModel = new AdsModel(id, app_id, name, ads_id);
-                listAdsModel.add(adsModel);
-
-                for (AdsModel ads : listAdsModel) {
-                    List<String> listIDAds = null;
-                    if (listAds.containsKey(ads.getName())) {
-                        listIDAds = listAds.get(ads.getName());
-                    }
-                    if (listIDAds == null) {
-                        listIDAds = new ArrayList<>();
-                    }
-                    listIDAds.add(ads.getAds_id());
-                    listAds.put(ads.getName().trim(), listIDAds);
+                // check if 'name' exists
+                List<String> listIDAds = listAds.get(name);
+                if (listIDAds == null) {
+                    listIDAds = new ArrayList<>();
+                    listAds.put(name, listIDAds);
                 }
+
+                // add ads_id
+                listIDAds.add(ads_id);
             }
             Log.d(TAG, "convertJsonIdAdsDefaultToList: " + listAds.size());
+
+            for (Map.Entry<String, List<String>> entry : listAds.entrySet()) {
+                Log.d(TAG, "Key: " + entry.getKey() + ", Value: " + entry.getValue());
+            }
         } catch (Exception e) {
-            Log.d(TAG, "convertJsonIdAdsDefaultToList: Exception: Invalid json");
+            Log.d(TAG, "convertJsonIdAdsDefaultToList: Exception: " + e.getMessage());
         }
     }
 
