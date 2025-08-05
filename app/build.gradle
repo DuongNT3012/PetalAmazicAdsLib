@@ -71,5 +71,5 @@ dependencies {
 
     //hms core
     implementation 'com.huawei.hms:hwid:5.0.1.301'
-    implementation 'com.huawei.hms:hmscoreinstaller:6.6.0.300'
+    //implementation 'com.huawei.hms:hmscoreinstaller:6.6.0.300'
 }
