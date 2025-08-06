@@ -13,15 +13,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.zoomcamera.petalamazic.R;
-import com.zoomcamera.petalamazic.banner_ads.PetalBannerBuilder;
-import com.zoomcamera.petalamazic.callback.InterAdsCallback;
-import com.zoomcamera.petalamazic.callback.RewardAdsCallback;
-import com.zoomcamera.petalamazic.callback.SplashAdsCallback;
-import com.zoomcamera.petalamazic.dialog.LoadingAdsDialog;
-import com.zoomcamera.petalamazic.native_ads.PetalNativeBuilder;
-import com.zoomcamera.petalamazic.utils.NetworkUtil;
-import com.zoomcamera.petalamazic.utils.RemoteConfigHelper;
 import com.huawei.hms.ads.AdListener;
 import com.huawei.hms.ads.AdParam;
 import com.huawei.hms.ads.AudioFocusType;
@@ -40,6 +31,15 @@ import com.huawei.hms.ads.reward.RewardAdLoadListener;
 import com.huawei.hms.ads.reward.RewardAdStatusListener;
 import com.huawei.hms.ads.splash.SplashAdDisplayListener;
 import com.huawei.hms.ads.splash.SplashView;
+import com.zoomcamera.petalamazic.R;
+import com.zoomcamera.petalamazic.banner_ads.PetalBannerBuilder;
+import com.zoomcamera.petalamazic.callback.InterAdsCallback;
+import com.zoomcamera.petalamazic.callback.RewardAdsCallback;
+import com.zoomcamera.petalamazic.callback.SplashAdsCallback;
+import com.zoomcamera.petalamazic.dialog.LoadingAdsDialog;
+import com.zoomcamera.petalamazic.native_ads.PetalNativeBuilder;
+import com.zoomcamera.petalamazic.utils.NetworkUtil;
+import com.zoomcamera.petalamazic.utils.RemoteConfigHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,89 +64,96 @@ public class Petal {
     }
 
     //SPLASH ADS
+    private boolean isLoadingSplashAds = false;
+
     public void loadSplashAds(AppCompatActivity activity, SplashView splashView, List<String> listIdSplashAds, SplashAdsCallback splashAdsCallback, String remoteKey) {
-        ArrayList<String> listIdInterTemp = new ArrayList<>(listIdSplashAds);
+        if (!isLoadingSplashAds) {
+            isLoadingSplashAds = true;
+            ArrayList<String> listIdInterTemp = new ArrayList<>(listIdSplashAds);
 
-        //Set timeout ads splash x(s) if cannot load
-        runnable = () -> {
-            if (splashAdsCallback != null) {
-                Log.d(TAG, "SPLASH ADS: loadSplashAds: timeout");
-                isLoadInterSplashIdTimeout = true;
-                splashAdsCallback.onNextAction();
-            }
-            if (handlerTimeoutSplash != null) {
-                handlerTimeoutSplash = null;
-            }
-        };
-        if (handlerTimeoutSplash != null) {
-            handlerTimeoutSplash.postDelayed(runnable, AD_TIMEOUT);
-        }
-
-        //Check condition
-        if (!NetworkUtil.isNetworkActive(activity) || listIdInterTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
-            Log.d(TAG, "SPLASH ADS: Check condition. RemoteKey:" + remoteKey + ". Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdInterTemp.isEmpty() + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
-            if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
-                loadingAdsDialog.dismiss();
-            }
-            if (handlerTimeoutSplash != null && runnable != null) {
-                handlerTimeoutSplash.removeCallbacks(runnable);
-                handlerTimeoutSplash.removeCallbacksAndMessages(null);
-                handlerTimeoutSplash = null;
-            }
-            splashAdsCallback.onNextAction();
-            return;
-        }
-
-        loadingAdsDialog = new LoadingAdsDialog(activity);
-        if (!loadingAdsDialog.isShowing()) {
-            loadingAdsDialog.show();
-        }
-        AdParam.Builder builder = new AdParam.Builder();
-        AdParam adParam = builder.build();
-        SplashView.SplashAdLoadListener splashAdLoadListener = new SplashView.SplashAdLoadListener() {
-            @Override
-            public void onAdLoaded() {
-                // Called when an ad is loaded successfully.
-                Log.i(TAG, "SPLASH ADS: onAdLoaded: " + remoteKey);
-                splashAdsCallback.onAdLoaded();
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Called when an ad fails to be loaded. The app home screen is then displayed.
-                Log.e(TAG, "SPLASH ADS: onAdFailedToLoad: code " + errorCode + " " + remoteKey);
-                splashAdsCallback.onAdFailedToLoad(errorCode);
-                if (!listIdInterTemp.isEmpty()) {
-                    listIdInterTemp.remove(0);
+            //Set timeout ads splash x(s) if cannot load
+            runnable = () -> {
+                if (splashAdsCallback != null) {
+                    Log.d(TAG, "SPLASH ADS: loadSplashAds: timeout");
+                    isLoadInterSplashIdTimeout = true;
+                    splashAdsCallback.onNextAction();
                 }
+                if (handlerTimeoutSplash != null) {
+                    handlerTimeoutSplash = null;
+                }
+            };
+            if (handlerTimeoutSplash != null) {
+                handlerTimeoutSplash.postDelayed(runnable, AD_TIMEOUT);
+            }
+
+            //Check condition
+            if (!NetworkUtil.isNetworkActive(activity) || listIdInterTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(activity, remoteKey)) {
+                Log.d(TAG, "SPLASH ADS: Check condition. RemoteKey:" + remoteKey + ". Network:" + NetworkUtil.isNetworkActive(activity) + "_IdEmpty:" + listIdInterTemp.isEmpty() + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(activity, remoteKey));
                 if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
                     loadingAdsDialog.dismiss();
                 }
-                loadSplashAds(activity, splashView, listIdInterTemp, splashAdsCallback, remoteKey);
-            }
-
-            @Override
-            public void onAdDismissed() {
-                // Called when an ad has been displayed. The app home screen is then displayed.
-                Log.d(TAG, "SPLASH ADS: onAdDismissed: " + remoteKey);
-                splashAdsCallback.onAdDismissed();
+                if (handlerTimeoutSplash != null && runnable != null) {
+                    handlerTimeoutSplash.removeCallbacks(runnable);
+                    handlerTimeoutSplash.removeCallbacksAndMessages(null);
+                    handlerTimeoutSplash = null;
+                }
                 splashAdsCallback.onNextAction();
+                return;
             }
-        };
-        String slotId;
-        // Lock the screen orientation on the device. Your app will automatically adapt to the screen orientation.
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        int orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        // Set the default slogan and the splash ad unit ID based on the screen orientation on the device.
-        //splashView.setSloganResId(R.drawable.default_slogan);
-        slotId = listIdInterTemp.get(0);
-        // Obtain SplashView.
-        // Set the audio focus type for a video splash ad.
-        splashView.setAudioFocusType(AudioFocusType.NOT_GAIN_AUDIO_FOCUS_WHEN_MUTE);
-        // Load the ad.
-        splashView.load(slotId, orientation, adParam, splashAdLoadListener);
 
-        showSplashAds(splashView, splashAdsCallback, remoteKey);
+            loadingAdsDialog = new LoadingAdsDialog(activity);
+            if (!loadingAdsDialog.isShowing()) {
+                loadingAdsDialog.show();
+            }
+            AdParam.Builder builder = new AdParam.Builder();
+            AdParam adParam = builder.build();
+            SplashView.SplashAdLoadListener splashAdLoadListener = new SplashView.SplashAdLoadListener() {
+                @Override
+                public void onAdLoaded() {
+                    // Called when an ad is loaded successfully.
+                    Log.i(TAG, "SPLASH ADS: onAdLoaded: " + remoteKey);
+                    splashAdsCallback.onAdLoaded();
+                    isLoadingSplashAds = false;
+                }
+
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    // Called when an ad fails to be loaded. The app home screen is then displayed.
+                    Log.e(TAG, "SPLASH ADS: onAdFailedToLoad: code " + errorCode + " " + remoteKey);
+                    splashAdsCallback.onAdFailedToLoad(errorCode);
+                    isLoadingSplashAds = false;
+                    if (!listIdInterTemp.isEmpty()) {
+                        listIdInterTemp.remove(0);
+                    }
+                    if (loadingAdsDialog != null && loadingAdsDialog.isShowing()) {
+                        loadingAdsDialog.dismiss();
+                    }
+                    //loadSplashAds(activity, splashView, listIdInterTemp, splashAdsCallback, remoteKey);
+                }
+
+                @Override
+                public void onAdDismissed() {
+                    // Called when an ad has been displayed. The app home screen is then displayed.
+                    Log.d(TAG, "SPLASH ADS: onAdDismissed: " + remoteKey);
+                    splashAdsCallback.onAdDismissed();
+                    splashAdsCallback.onNextAction();
+                }
+            };
+            String slotId;
+            // Lock the screen orientation on the device. Your app will automatically adapt to the screen orientation.
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            int orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            // Set the default slogan and the splash ad unit ID based on the screen orientation on the device.
+            //splashView.setSloganResId(R.drawable.default_slogan);
+            slotId = listIdInterTemp.get(0);
+            // Obtain SplashView.
+            // Set the audio focus type for a video splash ad.
+            splashView.setAudioFocusType(AudioFocusType.NOT_GAIN_AUDIO_FOCUS_WHEN_MUTE);
+            // Load the ad.
+            splashView.load(slotId, orientation, adParam, splashAdLoadListener);
+
+            showSplashAds(splashView, splashAdsCallback, remoteKey);
+        }
     }
 
     public void showSplashAds(SplashView splashView, SplashAdsCallback splashAdsCallback, String remoteKey) {
