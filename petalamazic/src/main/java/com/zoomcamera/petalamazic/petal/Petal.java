@@ -454,7 +454,7 @@ public class Petal {
         nativeAdLoader.loadAds(new AdParam.Builder().build(), 1);
     }
 
-    private void initNativeAdView(NativeAd nativeAd, NativeView nativeView) {
+    public void initNativeAdView(NativeAd nativeAd, NativeView nativeView) {
         // Register and populate the title view.
         nativeView.setTitleView(nativeView.findViewById(R.id.ad_title));
         ((TextView) nativeView.getTitleView()).setText(nativeAd.getTitle());
