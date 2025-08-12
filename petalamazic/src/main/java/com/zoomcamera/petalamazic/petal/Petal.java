@@ -130,6 +130,11 @@ public class Petal {
                         loadingAdsDialog.dismiss();
                     }
                     //loadSplashAds(activity, splashView, listIdInterTemp, splashAdsCallback, remoteKey);
+                    if (handlerTimeoutSplash != null && runnable != null) {
+                        handlerTimeoutSplash.removeCallbacks(runnable);
+                        handlerTimeoutSplash.removeCallbacksAndMessages(null);
+                        handlerTimeoutSplash = null;
+                    }
                 }
 
                 @Override
