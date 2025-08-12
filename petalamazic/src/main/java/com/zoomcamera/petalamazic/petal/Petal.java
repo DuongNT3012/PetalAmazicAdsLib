@@ -34,6 +34,7 @@ import com.huawei.hms.ads.splash.SplashView;
 import com.zoomcamera.petalamazic.R;
 import com.zoomcamera.petalamazic.banner_ads.PetalBannerBuilder;
 import com.zoomcamera.petalamazic.callback.InterAdsCallback;
+import com.zoomcamera.petalamazic.callback.NativeAdsCallback;
 import com.zoomcamera.petalamazic.callback.RewardAdsCallback;
 import com.zoomcamera.petalamazic.callback.SplashAdsCallback;
 import com.zoomcamera.petalamazic.dialog.LoadingAdsDialog;
@@ -364,6 +365,93 @@ public class Petal {
         builder.setCur("Currency code list");*/
         nativeAdLoader.loadAds(new AdParam.Builder().build(), maxRequest);
         return myNativeAds;
+    }
+
+    public void loadNativeAds(Context context, List<String> listIdNative, NativeAdsCallback nativeAdsCallback, String remoteKey) {
+        ArrayList<String> listIdNativeTemp = new ArrayList<>(listIdNative);
+        //Check condition
+        if (!NetworkUtil.isNetworkActive(context) || listIdNativeTemp.isEmpty() || !isShowAllAds || !RemoteConfigHelper.getInstance().get_config(context, remoteKey)) {
+            Log.d(TAG, "NATIVE: Check condition. RemoteKey:" + remoteKey + "_Network:" + NetworkUtil.isNetworkActive(context) + "_IdEmpty:" + listIdNativeTemp.isEmpty() + "_UMP:" + "_ShowAllAds:" + isShowAllAds + "_RemoteConfig:" + RemoteConfigHelper.getInstance().get_config(context, remoteKey));
+            nativeAdsCallback.onAdFailed(-1);
+            return;
+        }
+        NativeAdLoader.Builder builder = new NativeAdLoader.Builder(context, listIdNativeTemp.get(0));
+        NativeAdLoader nativeAdLoader = builder.setNativeAdLoadedListener(new NativeAd.NativeAdLoadedListener() {
+            @Override
+            public void onNativeAdLoaded(NativeAd nativeAd) {
+                // Called each time an ad is successfully loaded.
+                Log.i(TAG, "NATIVE: onNativeAdLoaded: " + remoteKey);
+                nativeAdsCallback.onNativeAdLoaded(nativeAd);
+
+                VideoConfiguration videoConfiguration = new VideoConfiguration.Builder()
+                        .setStartMuted(false)
+                        .setAutoPlayNetwork(AutoPlayNetType.BOTH_WIFI_AND_DATA)
+                        .build();
+                nativeAd.setVideoConfiguration(videoConfiguration);
+            }
+        }).setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Called when all ads are successfully returned.
+                Log.i(TAG, "NATIVE: onAdLoaded: " + remoteKey);
+                nativeAdsCallback.onAdLoaded();
+
+            }
+
+            @Override
+            public void onAdFailed(int errorCode) {
+                // Called when ads fail to be loaded.
+                Log.e(TAG, "NATIVE: onAdFailed: " + errorCode + " " + remoteKey);
+                nativeAdsCallback.onAdFailed(errorCode);
+                if (!listIdNativeTemp.isEmpty()) {
+                    listIdNativeTemp.remove(0);
+                }
+                loadNativeAds(context, listIdNativeTemp, nativeAdsCallback, remoteKey);
+            }
+
+            @Override
+            public void onAdClicked() {
+                super.onAdClicked();
+                Log.d(TAG, "NATIVE: onAdClicked: " + remoteKey);
+                nativeAdsCallback.onAdClicked();
+            }
+
+            @Override
+            public void onAdImpression() {
+                super.onAdImpression();
+                Log.d(TAG, "NATIVE: onAdImpression: " + remoteKey);
+                nativeAdsCallback.onAdImpression();
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+                Log.d(TAG, "NATIVE: onAdOpened: " + remoteKey);
+                nativeAdsCallback.onAdOpened();
+            }
+
+            @Override
+            public void onAdLeave() {
+                super.onAdLeave();
+                Log.d(TAG, "NATIVE: onAdLeave: " + remoteKey);
+                nativeAdsCallback.onAdLeave();
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                Log.d(TAG, "NATIVE: onAdClosed: " + remoteKey);
+                nativeAdsCallback.onAdClosed();
+            }
+        }).build();
+        /*AdParam.Builder builder = new AdParam.Builder();
+        // (Optional) Set the parameters for a real-time bidding ad unit.
+        BiddingParam biddingParam = new BiddingParam();
+        String slotId = "testy63txaom86";
+        builder.addBiddingParamMap(slotId, biddingParam);
+        builder.setTMax(500);
+        builder.setCur("Currency code list");*/
+        nativeAdLoader.loadAds(new AdParam.Builder().build(), 1);
     }
 
     private void initNativeAdView(NativeAd nativeAd, NativeView nativeView) {
